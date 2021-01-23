@@ -72,7 +72,7 @@ const runBot = () => {
             //message.channel.send(`Aquí tienes ${message.author.toString()} onichan \n ${founds[0]}`);
           }
           else if (args.length == 1 && founds.length > 1) {
-            let unitsFounded = "\`\`\`\n- .mass " + founds.map(x => x.unitName).join("\n- .mass ") + "\`\`\`";
+            let unitsFounded = "\`\`\`\n- " + founds.map(x => x.unitName).join("\n- ") + "\`\`\`";
             message.channel.send(`¡${message.author.toString()} eres desesperante! Te perdono pero solo por esta vez, escoge solo una baaaka :triumph: ` + unitsFounded);
           }
           else {
