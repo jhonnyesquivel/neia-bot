@@ -11,7 +11,7 @@ module.exports = {
   usage: '<unidad> [prop1 prop2 ...propX] ',
   description: 'Busca la informacion de una unidad del juego',
   execute: async (message, args) => {
-    let unitName = args[0];
+    let [unitName] = args;
     let unit = await memoized(unitName);
     let { channel } = message
     let founds = [];
@@ -21,12 +21,13 @@ module.exports = {
       const nameTokens = urlUnit
         .replace(/\[/g, " ")
         .replace(/\]/g, " ")
-        .replace(/  /g, " ")
+        .replace(/\]/g, " ")
+        .replace(/-/g, " ")
         .toLowerCase()
         .split(" ")
         .filter(x => x.length > 0);
 
-      const found = arrayContainsArray(nameTokens, args);
+      const found = arrayContainsArray(nameTokens, [...unitName.split("-"), ...args.slice(1)]);
 
       if (found) {
         founds.push({
@@ -69,7 +70,7 @@ module.exports = {
 
 const fetchUnits = async (unitName) => {
   let pesonajes = [];
-  let storageRefGL = Storage.ref("PERSONAJES/UNIDADES/" + toPascalCase(unitName));
+  let storageRefGL = Storage.ref("PERSONAJES/UNIDADES/" + unitName.split("-").map(x => toPascalCase(x)).join("-"));
   var res = await storageRefGL.listAll();
   for (const itemRef of res.items) {
     let url = await itemRef.getDownloadURL();
