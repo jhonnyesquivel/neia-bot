@@ -12,6 +12,8 @@ module.exports = {
   description: 'Busca la informacion de una unidad del juego',
   execute: async (message, args) => {
     let [unitName] = args;
+    let { channel } = message
+    let founds = [];
 
     if (unitName == "clear" && args.length == 1) {
       memoized.clear();
@@ -19,8 +21,6 @@ module.exports = {
     }
 
     let unit = await memoized(unitName);
-    let { channel } = message
-    let founds = [];
 
     unit.forEach(unitUrl => {
       const urlUnit = urlUnitName(decodeURI(unitUrl).replace(/%2F/g, "/"));
