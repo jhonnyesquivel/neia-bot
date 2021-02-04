@@ -12,6 +12,12 @@ module.exports = {
   description: 'Busca la informacion de una unidad del juego',
   execute: async (message, args) => {
     let [unitName] = args;
+
+    if (unitName == "clear" && args.length == 1) {
+      memoized.clear();
+      return;
+    }
+
     let unit = await memoized(unitName);
     let { channel } = message
     let founds = [];
