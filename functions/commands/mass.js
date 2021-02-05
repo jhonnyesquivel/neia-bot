@@ -14,6 +14,7 @@ module.exports = {
     let [unitName] = args;
     let { channel } = message
     let founds = [];
+    unitName = unitName.toLowerCase();
 
     if (unitName == "clear" && args.length == 1) {
       memoized.clear();
