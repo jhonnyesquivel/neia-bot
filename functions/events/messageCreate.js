@@ -4,7 +4,6 @@ const Util = require('../utils/utils')
 
 module.exports = async (client, message) => {
 
-    console.log(config.whitelist);
     if (message.author.bot) return;
     if (!message.content.startsWith(config.prefix)) return
     if (!config.whitelist.includes(message.channel.parentId)) return;
