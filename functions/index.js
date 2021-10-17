@@ -33,8 +33,9 @@ files.forEach((fileName) => {
 console.log(config.botToken)
 client.login(config.botToken)
 
-exports.neiaTsundereBot = Functions.pubsub.schedule('every 5 minutes').onRun((context) => {
-  console.log('Wakeup neia');
+exports.neiaTsundereBot = Functions.pubsub.schedule('every 20 minutes').onRun((context) => {
+  
+  console.log('Wakeup neia', context.eventId);
   return null;
 });
 
