@@ -51,6 +51,13 @@ https://console.firebase.google.com/u/0/project/{your-project}/settings/servicea
 }
 ```
 
+### Run local
+
+```bash
+> cd /functions/
+> node index.js
+```
+
 ### Deploy
 You can deploy using the default configuration or if yoy need an special configuration, just folow the firebase instructions
 https://firebase.google.com/docs/functions/get-started
