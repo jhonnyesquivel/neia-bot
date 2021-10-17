@@ -1,9 +1,12 @@
+const serviceAccount = require("./serviceAccountKey.json");
 const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
     databaseURL: process.env.DATABASE_URL,
-    storageBucket: process.env.STORAGE_BUCKET
+    storageBucket: process.env.STORAGE_BUCKET,
+    botToken: process.env.BOT_TOKEN,
+    prefix: process.env.PREFIX,
+    whitelist: process.env.WHITELIST.split(" "),
+    serviceAccount: serviceAccount,
 };
