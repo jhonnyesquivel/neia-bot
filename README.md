@@ -24,9 +24,9 @@ Create a .env file inside the */functions/* folder
 ```
 DATABASE_URL=
 STORAGE_BUCKET=
-BOT_TOKEN=
-PREFIX=*
-WHITELIST=
+BOT_TOKEN= <discord bot token>
+PREFIX=* <prefix to use the bot in the discord channels>
+WHITELIST= <channels id where will be used the bot>
 ```
 ### Google Service Account
 
