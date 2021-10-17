@@ -33,7 +33,7 @@ files.forEach((fileName) => {
 console.log(config.botToken)
 client.login(config.botToken)
 
-exports.neiaTsundereBot = Functions.pubsub.schedule('every 10 minutes').onRun((context) => {
+exports.neiaTsundereBot = Functions.pubsub.schedule('every 15 minutes').onRun((context) => {
   
   console.log('Wakeup neia', context.eventId);
   return null;
