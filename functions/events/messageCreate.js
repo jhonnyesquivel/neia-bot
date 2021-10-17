@@ -1,14 +1,15 @@
-const config = require('../config.json')
+const config = require('../config')
 const Style = require('../utils/messageStyle')
 const Util = require('../utils/utils')
 
 module.exports = async (client, message) => {
+
     if (message.author.bot) return;
-    if (!message.content.startsWith(config.PREFIX)) return
-    if (!config.WHITELIST.includes(message.channel.parentID)) return;
+    if (!message.content.startsWith(config.prefix)) return
+    if (!config.whitelist.includes(message.channel.parentId)) return;
 
     const splitMessage = message.content
-        .slice(config.PREFIX.length)
+        .slice(config.prefix.length)
         .trim()
         .split(/ +/)
     let [commandName, args] = [
@@ -23,19 +24,18 @@ module.exports = async (client, message) => {
         args = args.split(command.delimiter ? command.delimiter : " ")
     }
 
-    if (
-        Object.prototype.hasOwnProperty.call(command, 'min_args') &&
-        command.min_args > args.length
-    ) {
+    if (Object.prototype.hasOwnProperty.call(command, 'min_args') && command.min_args > args.length) {
+        
         let embeddedMessage = Util.embedMessage(
             "",
             message.author,
             '0xffff00',
             Style.bash(
-                `El uso correcto del comando es: \n${config.PREFIX}${commandName} ${command.usage}`
+                `El uso correcto del comando es: \n${config.prefix}${commandName} ${command.usage}`
             )
         )
-        message.channel.send("¡Eres un tonto, muérete, ¿Que no sabes escribir?!", embeddedMessage)
+
+        message.channel.send({ content: "¡Eres un tonto, muérete, ¿Que no sabes escribir?!", embeds: [embeddedMessage] })
         return
     }
 

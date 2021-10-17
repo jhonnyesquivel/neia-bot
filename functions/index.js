@@ -1,13 +1,15 @@
 const firebase = require("./firebase");
-const config = require("./config.json");
-const { Client, Collection } = require('discord.js');
+const config = require("./config");
+const { Client, Collection, Intents } = require('discord.js');
 const { Functions } = firebase.firebaseTools;
 const fs = require("fs")
 const path = require('path')
 
 
 
-const client = new Client();
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+})
 client.aliases = new Collection()
 client.commands = new Collection();
 
@@ -28,10 +30,12 @@ files.forEach((fileName) => {
   }
 })
 
-client.login(config.BOT_TOKEN)
+console.log(config.botToken)
+client.login(config.botToken)
 
-exports.neiaTsundereBot = Functions.pubsub.schedule('every 5 minutes').onRun((context) => {
-  console.log('Wakeup neia');
+exports.neiaTsundereBot = Functions.pubsub.schedule('every 10 minutes').onRun((context) => {
+  
+  console.log('Wakeup neia', context.eventId);
   return null;
 });
 
