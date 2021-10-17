@@ -3,9 +3,10 @@ const Style = require('../utils/messageStyle')
 const Util = require('../utils/utils')
 
 module.exports = async (client, message) => {
+
     if (message.author.bot) return;
     if (!message.content.startsWith(config.PREFIX)) return
-    if (!config.WHITELIST.includes(message.channel.parentID)) return;
+    if (!config.WHITELIST.includes(message.channel.parentId)) return;
 
     const splitMessage = message.content
         .slice(config.PREFIX.length)
@@ -23,10 +24,8 @@ module.exports = async (client, message) => {
         args = args.split(command.delimiter ? command.delimiter : " ")
     }
 
-    if (
-        Object.prototype.hasOwnProperty.call(command, 'min_args') &&
-        command.min_args > args.length
-    ) {
+    if (Object.prototype.hasOwnProperty.call(command, 'min_args') && command.min_args > args.length) {
+        
         let embeddedMessage = Util.embedMessage(
             "",
             message.author,
@@ -35,7 +34,8 @@ module.exports = async (client, message) => {
                 `El uso correcto del comando es: \n${config.PREFIX}${commandName} ${command.usage}`
             )
         )
-        message.channel.send("¡Eres un tonto, muérete, ¿Que no sabes escribir?!", embeddedMessage)
+
+        message.channel.send({ content: "¡Eres un tonto, muérete, ¿Que no sabes escribir?!", embeds: [embeddedMessage] })
         return
     }
 

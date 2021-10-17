@@ -1,13 +1,15 @@
 const firebase = require("./firebase");
 const config = require("./config.json");
-const { Client, Collection } = require('discord.js');
+const { Client, Collection, Intents } = require('discord.js');
 const { Functions } = firebase.firebaseTools;
 const fs = require("fs")
 const path = require('path')
 
 
 
-const client = new Client();
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+})
 client.aliases = new Collection()
 client.commands = new Collection();
 

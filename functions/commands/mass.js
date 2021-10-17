@@ -1,9 +1,8 @@
 const firebase = require("../firebase");
 const Util = require('../utils/utils.js')
-global.XMLHttpRequest = require("xhr2");
 
 let memoize = require("memoizee");
-let { Storage } = firebase.firebaseTools;
+let { Bucket } = firebase.firebaseTools;
 
 module.exports = {
   name: 'mass',
@@ -11,6 +10,9 @@ module.exports = {
   usage: '<unidad> [prop1 prop2 ...propX] ',
   description: 'Busca la informacion de una unidad del juego',
   execute: async (message, args) => {
+
+    console.log("executed");
+
     let [unitName] = args;
     let { channel } = message
     let founds = [];
@@ -22,6 +24,7 @@ module.exports = {
     }
 
     let unit = await memoized(unitName);
+
 
     unit.forEach(unitUrl => {
       const urlUnit = urlUnitName(decodeURI(unitUrl).replace(/%2F/g, "/"));
@@ -42,7 +45,6 @@ module.exports = {
           unitName: urlUnit,
           url: unitUrl
         });
-
       }
     });
 
@@ -54,35 +56,39 @@ module.exports = {
 
       const [unit] = founds;
       const { url, unitName } = unit;
+
       let embeddedMessage = Util.embedMessage(
         unitName,
         message.author,
         '5d0e1b',
         "",
         url
-      )
-      channel.send(`Aquí tienes ${message.author.toString()} onichan. ¡No te confundas! no lo hice por ti, es solo que... \n`, embeddedMessage);
+      );
+
+      channel.send({ content: `Aquí tienes ${message.author.toString()} onichan. ¡No te confundas! no lo hice por ti, es solo que... \n`, embeds: [embeddedMessage] });
     }
     else if (args.length == 1 && founds.length > 1) {
       let unitsFounded = "\`\`\`\n- " + founds.map(x => x.unitName).join("\n- ") + "\`\`\`";
-      channel.send(`¡${message.author.toString()} eres desesperante! Te perdono pero solo por esta vez, escoge solo una baaaka :triumph: ` + unitsFounded);
+      channel.send({ content: `¡${message.author.toString()} eres desesperante! Te perdono pero solo por esta vez, escoge solo una baaaka :triumph: ` + unitsFounded });
     }
     else {
-      channel.send(`No encontré nada, escribe bien baka ${message.author.toString()} onichan :triumph: `);
+      channel.send({ content: `No encontré nada, escribe bien baka ${message.author.toString()} onichan :triumph: ` });
     }
   },
 }
 
 
-
-const fetchUnits = async (unitName) => {
+const fetchUnitsFromBucket = async (unitName) => {
   let pesonajes = [];
-  let storageRefGL = Storage.ref("PERSONAJES/UNIDADES/" + unitName.split("-").map(x => toPascalCase(x)).join("-"));
-  var res = await storageRefGL.listAll();
-  for (const itemRef of res.items) {
-    let url = await itemRef.getDownloadURL();
+  let response = await Bucket.getFiles({ prefix: "PERSONAJES/UNIDADES/" + unitName.split("-").map(x => toPascalCase(x)).join("-") });
+  const [units] = response;
+  units.forEach((unit) => {
+    let downloadToken = unit.metadata.metadata.firebaseStorageDownloadTokens;
+    let bucketName = unit.bucket.name;
+    let filePath = unit.id;
+    let url = `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${filePath}?alt=media&token=${downloadToken}`;
     pesonajes.push(url);
-  }
+  });
   return pesonajes;
 }
 
@@ -113,4 +119,4 @@ const toPascalCase = (text) => {
     .replace(new RegExp(/\w/), s => s.toUpperCase());
 };
 
-memoized = memoize(fetchUnits, { promise: true });
+memoized = memoize(fetchUnitsFromBucket, { promise: true });
